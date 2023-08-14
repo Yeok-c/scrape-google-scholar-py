@@ -5,6 +5,8 @@ from .custom_backend.top_mandates_metrics import CustomGoogleScholarTopMandates
 from .custom_backend.top_publications_metrics import CustomGoogleScholarTopPublications
 from .custom_backend.top_publications_article import CustomGoogleScholarTopPublicationArticle
 from .custom_backend.top_publications_article_citation import CustomGoogleScholarTopPublicationArticleCitation
+from .custom_backend.article_info_pdf import CustomGoogleScholarArticleDownload
+
 
 # serpapi backend
 from .serpapi_backend.organic_results import SerpApiGoogleScholarOrganic

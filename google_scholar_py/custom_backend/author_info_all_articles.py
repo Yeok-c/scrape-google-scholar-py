@@ -16,7 +16,8 @@ class CustomGoogleScholarAuthor:
             self,
             user_id: str, 
             parse_articles: bool = False,
-            article_pagination: bool = False 
+            article_pagination: bool = False,
+            sort_by_date: bool = False
         ) -> Dict[str, List[Union[str, int, None]]]:
         '''
         Extracts data from Google Scholar Author profile page:
@@ -60,7 +61,7 @@ class CustomGoogleScholarAuthor:
         options.add_experimental_option('excludeSwitches', ['enable-automation', 'enable-logging'])
         options.add_experimental_option('useAutomationExtension', False)
         
-        service = Service(ChromeDriverManager().install())
+        service = Service() #ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
         
         stealth(driver,
@@ -71,8 +72,10 @@ class CustomGoogleScholarAuthor:
             renderer='Intel Iris OpenGL Engine',
             fix_hairline=True,
         )
-        
-        driver.get(f'https://scholar.google.com/citations?user={user_id}&hl=en&gl=us&pagesize=100')
+        if sort_by_date:
+            driver.get(f'https://scholar.google.com/citations?user={user_id}&hl=en&gl=us&pagesize=100&sortby=pubdate')
+        else:
+            driver.get(f'https://scholar.google.com/citations?user={user_id}&hl=en&gl=us&pagesize=100')
         parser = LexborHTMLParser(driver.page_source)
         
         profile_info = {
@@ -135,11 +138,13 @@ class CustomGoogleScholarAuthor:
             profile_info.pop('articles')
 
         page_num = 0
-
         # extracts all articles
         if parse_articles and article_pagination:
             while True:
-                driver.get(f'https://scholar.google.com/citations?user={user_id}&hl=en&gl=us&cstart={page_num}&pagesize=100')
+                if sort_by_date:
+                    driver.get(f'https://scholar.google.com/citations?user={user_id}&hl=en&gl=us&cstart={page_num}&pagesize=100&sortby=pubdate')
+                else:
+                    driver.get(f'https://scholar.google.com/citations?user={user_id}&hl=en&gl=us&cstart={page_num}&pagesize=100')
                 parser = LexborHTMLParser(driver.page_source)
                 
                 for article in parser.css('.gsc_a_tr'):

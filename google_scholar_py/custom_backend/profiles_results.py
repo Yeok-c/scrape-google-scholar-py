@@ -110,7 +110,7 @@ class CustomGoogleScholarProfiles:
         options.add_experimental_option('excludeSwitches', ['enable-automation', 'enable-logging'])
         options.add_experimental_option('useAutomationExtension', False)
         
-        service = Service(ChromeDriverManager().install())
+        service = Service() #ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
         
         stealth(driver,
